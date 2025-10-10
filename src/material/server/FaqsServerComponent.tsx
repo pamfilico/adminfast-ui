@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 
-interface FaqItem {
+export interface FaqItem {
   id: string;
   translation_id?: string | null;
   title: string;
@@ -12,7 +12,7 @@ interface FaqItem {
   locale_code: string;
 }
 
-interface FaqsServerComponentProps {
+export interface FaqsServerComponentProps {
   locale: string;
   appId: string;
   adminPanelBaseDomain: string;
@@ -26,6 +26,23 @@ interface FaqsServerComponentProps {
   revalidate?: number;
 }
 
+export async function fetchFaqs(
+  locale: string,
+  appId: string,
+  adminPanelBaseDomain: string
+): Promise<FaqItem[]> {
+  const res = await fetch(`${adminPanelBaseDomain}/api/v1/apps/${appId}/faqs/locale/${locale}`, {
+    next: { revalidate: 86400 }
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch FAQs');
+  }
+
+  const json = await res.json();
+  return json.data || [];
+}
+
 export default async function FaqsServerComponent({
   locale,
   appId,
@@ -33,14 +50,7 @@ export default async function FaqsServerComponent({
   renderComponent: RenderComponent,
   revalidate = 86400,
 }: FaqsServerComponentProps) {
-  const res = await fetch(`${adminPanelBaseDomain}/api/v1/apps/${appId}/faqs/locale/${locale}`);
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch FAQs');
-  }
-
-  const json = await res.json();
-  const faqs: FaqItem[] = json.data || [];
+  const faqs = await fetchFaqs(locale, appId, adminPanelBaseDomain);
 
   if (faqs.length === 0) {
     return null;

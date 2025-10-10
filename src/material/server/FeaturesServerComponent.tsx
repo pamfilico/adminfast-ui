@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 
-interface FeatureItem {
+export interface FeatureItem {
   id: string;
   translation_id?: string | null;
   title: string;
@@ -12,7 +12,7 @@ interface FeatureItem {
   locale_code: string;
 }
 
-interface FeaturesServerComponentProps {
+export interface FeaturesServerComponentProps {
   locale: string;
   appId: string;
   adminPanelBaseDomain: string;
@@ -24,6 +24,23 @@ interface FeaturesServerComponentProps {
   revalidate?: number;
 }
 
+export async function fetchFeatures(
+  locale: string,
+  appId: string,
+  adminPanelBaseDomain: string
+): Promise<FeatureItem[]> {
+  const res = await fetch(`${adminPanelBaseDomain}/api/v1/apps/${appId}/features/locale/${locale}`, {
+    next: { revalidate: 86400 }
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch features');
+  }
+
+  const json = await res.json();
+  return json.data || [];
+}
+
 export default async function FeaturesServerComponent({
   locale,
   appId,
@@ -31,14 +48,7 @@ export default async function FeaturesServerComponent({
   renderComponent: RenderComponent,
   revalidate = 86400,
 }: FeaturesServerComponentProps) {
-  const res = await fetch(`${adminPanelBaseDomain}/api/v1/apps/${appId}/features/locale/${locale}`);
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch features');
-  }
-
-  const json = await res.json();
-  const features: FeatureItem[] = json.data || [];
+  const features = await fetchFeatures(locale, appId, adminPanelBaseDomain);
 
   if (features.length === 0) {
     return null;

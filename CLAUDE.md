@@ -65,9 +65,35 @@ npm run release:major  # Manual: 1.x.x -> (x+1).0.0 - for breaking changes
    - Support for both `description` (FAQs/Features) and `content` (Terms/Privacy) fields
    - Props: `appID`, `contentID`, `contentType`, `title`, `apiEndpoint`, `useContentField`
 
+#### Server Components (SEO-Optimized for Public Pages)
+
+3. **FeaturesServerComponent** (`src/material/server/FeaturesServerComponent.tsx`)
+   - Server-side component for rendering features on public-facing pages
+   - Fetches data server-side for optimal SEO
+   - Includes `fetchFeatures()` helper function for metadata generation
+   - Exports TypeScript interfaces: `FeatureItem`, `FeaturesServerComponentProps`
+   - Props: `locale`, `appId`, `adminPanelBaseDomain`, `renderComponent`, `revalidate`
+
+4. **FaqsServerComponent** (`src/material/server/FaqsServerComponent.tsx`)
+   - Server-side component for rendering FAQs on public-facing pages
+   - Fetches data server-side for optimal SEO
+   - Includes `fetchFaqs()` helper function for metadata generation
+   - Exports TypeScript interfaces: `FaqItem`, `FaqsServerComponentProps`
+   - Props: `locale`, `appId`, `adminPanelBaseDomain`, `renderComponent`, `revalidate`
+
+#### SEO Utilities (`src/utils/seo.ts`)
+
+5. **SEO Helper Functions**
+   - `generateMetadataFromSeo(data, defaults)` - Generate Next.js Metadata from SEO fields
+   - `extractCollectionSeo(items, defaults)` - Generate metadata for collection pages
+   - `generateFaqStructuredData(faqs)` - Create FAQ schema.org JSON-LD for rich snippets
+   - `generateFeatureStructuredData(features, productName)` - Create Product schema for rich snippets
+   - All functions support OpenGraph and Twitter Card metadata
+   - **See [docs/SEO_IMPLEMENTATION_GUIDE.md](docs/SEO_IMPLEMENTATION_GUIDE.md) for complete usage examples**
+
 #### Legacy Feedback Components
 
-3. **MaterialFeedbackButton** (`src/material/MaterialFeedbackButton.tsx`)
+6. **MaterialFeedbackButton** (`src/material/MaterialFeedbackButton.tsx`)
    - Floating feedback button that captures screenshots using `html-to-image`
    - Opens fullscreen dialog with drawing canvas overlay (`react-canvas-draw`)
    - Side drawer form for feedback submission (Formik + Yup validation)
@@ -75,14 +101,14 @@ npm run release:major  # Manual: 1.x.x -> (x+1).0.0 - for breaking changes
    - Automatically captures current URL and device type
    - Supports manual screenshot upload if auto-capture fails
 
-4. **FeedbackPageComponent** (`src/material/FeedbackPageComponent.tsx`)
+7. **FeedbackPageComponent** (`src/material/FeedbackPageComponent.tsx`)
    - Paginated feedback list viewer with customizable fetch URL
    - Uses `fetchFeedbacksUrl` prop for fetching paginated feedback
    - Optional `editingUrl` prop for edit operations
    - Opens fullscreen dialog for inline editing
    - Shows device type indicators and type-based color coding
 
-5. **FeedbackEditPageComponent** (`src/material/FeedbackEditPageComponent.tsx`)
+8. **FeedbackEditPageComponent** (`src/material/FeedbackEditPageComponent.tsx`)
    - Wrapper that fetches feedback data and delegates to device-specific edit components
    - Automatically selects DesktopEditFeedbackComponent or MobileEditFeedbackComponent
 

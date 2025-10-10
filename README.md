@@ -91,6 +91,121 @@ A reusable edit component for managing content and translations:
 - `apiEndpoint` - API endpoint
 - `useContentField` - Use 'content' instead of 'description' (for terms/privacy)
 
+### Server Components (SEO-friendly)
+
+Server components for public-facing pages with built-in SEO support:
+
+#### FeaturesServerComponent
+
+```tsx
+import { FeaturesServerComponent } from "@pamfilico/adminfast-ui/material";
+import { MyFeaturesList } from "./components/MyFeaturesList";
+
+export default function FeaturesPage() {
+  return (
+    <FeaturesServerComponent
+      locale="en"
+      appId="your-app-id"
+      adminPanelBaseDomain="https://admin.example.com"
+      renderComponent={MyFeaturesList}
+    />
+  );
+}
+```
+
+#### FaqsServerComponent
+
+```tsx
+import { FaqsServerComponent } from "@pamfilico/adminfast-ui/material";
+import { MyFaqsList } from "./components/MyFaqsList";
+
+export default function FaqsPage() {
+  return (
+    <FaqsServerComponent
+      locale="en"
+      appId="your-app-id"
+      adminPanelBaseDomain="https://admin.example.com"
+      renderComponent={MyFaqsList}
+    />
+  );
+}
+```
+
+### SEO Utilities
+
+Generate Next.js metadata and structured data from your content:
+
+#### Generate Metadata for Feature Pages
+
+```tsx
+import { fetchFeatures, generateMetadataFromSeo, generateFeatureStructuredData } from "@pamfilico/adminfast-ui";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const features = await fetchFeatures("en", "your-app-id", "https://admin.example.com");
+
+  return generateMetadataFromSeo(
+    features[0],
+    { titleSuffix: "| Your App", siteName: "Your App" }
+  );
+}
+
+export default async function FeaturesPage() {
+  const features = await fetchFeatures("en", "your-app-id", "https://admin.example.com");
+  const structuredData = generateFeatureStructuredData(features, "Your Product");
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {/* Your page content */}
+    </>
+  );
+}
+```
+
+#### Generate Metadata for FAQ Pages
+
+```tsx
+import { fetchFaqs, extractCollectionSeo, generateFaqStructuredData } from "@pamfilico/adminfast-ui";
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const faqs = await fetchFaqs("en", "your-app-id", "https://admin.example.com");
+
+  return extractCollectionSeo(faqs, {
+    title: "Frequently Asked Questions",
+    description: "Find answers to common questions",
+    titleSuffix: "| Your App",
+    siteName: "Your App"
+  });
+}
+
+export default async function FaqsPage() {
+  const faqs = await fetchFaqs("en", "your-app-id", "https://admin.example.com");
+  const structuredData = generateFaqStructuredData(faqs);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {/* Your page content */}
+    </>
+  );
+}
+```
+
+**SEO Utilities Available:**
+- `generateMetadataFromSeo()` - Generate metadata from a single item
+- `extractCollectionSeo()` - Generate metadata from multiple items
+- `generateFaqStructuredData()` - Create FAQ schema for rich snippets
+- `generateFeatureStructuredData()` - Create product/feature schema
+- `StructuredData` component - Helper for injecting JSON-LD
+
 ### Material UI Feedback Button (Legacy)
 
 The package also includes the original feedback components:
