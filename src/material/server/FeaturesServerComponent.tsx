@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 
-interface FaqItem {
+interface FeatureItem {
   id: string;
   translation_id?: string | null;
   title: string;
@@ -12,47 +12,43 @@ interface FaqItem {
   locale_code: string;
 }
 
-interface FaqsServerComponentProps {
+interface FeaturesServerComponentProps {
   locale: string;
   appId: string;
   adminPanelBaseDomain: string;
   renderComponent: ComponentType<{
-    title: string;
-    items: FaqItem[];
-    path?: string;
+    title?: string;
+    features: FeatureItem[];
     section_id?: string;
-    is_section?: boolean;
   }>;
   revalidate?: number;
 }
 
-export default async function FaqsServerComponent({
+export default async function FeaturesServerComponent({
   locale,
   appId,
   adminPanelBaseDomain,
   renderComponent: RenderComponent,
   revalidate = 86400,
-}: FaqsServerComponentProps) {
-  const res = await fetch(`${adminPanelBaseDomain}/api/v1/apps/${appId}/faqs/locale/${locale}`);
+}: FeaturesServerComponentProps) {
+  const res = await fetch(`${adminPanelBaseDomain}/api/v1/apps/${appId}/features/locale/${locale}`);
 
   if (!res.ok) {
-    throw new Error('Failed to fetch FAQs');
+    throw new Error('Failed to fetch features');
   }
 
   const json = await res.json();
-  const faqs: FaqItem[] = json.data || [];
+  const features: FeatureItem[] = json.data || [];
 
-  if (faqs.length === 0) {
+  if (features.length === 0) {
     return null;
   }
 
   return (
     <RenderComponent
-      title="FAQs"
-      items={faqs}
-      path="faqs"
-      section_id="faqs_section"
-      is_section={true}
+      title="Features"
+      features={features}
+      section_id="features_section"
     />
   );
 }
