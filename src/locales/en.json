@@ -1,0 +1,51 @@
+{
+  "feedback": {
+    "button": {
+      "text": "Feedback"
+    },
+    "header": {
+      "drawHint": "💡 You can draw on the screenshot",
+      "drawHintMobile": "💡 Draw on screenshot"
+    },
+    "screenshot": {
+      "capturing": "Capturing screenshot...",
+      "failed": "Failed to capture screenshot",
+      "uploadManual": "Please try exiting this dialog and re-entering. If that doesn't work, take a manual screenshot and upload it using the button below. Sorry for the inconvenience.",
+      "uploadManualMobile": "Try exiting and re-entering. If that doesn't work, upload a screenshot manually. Sorry for the inconvenience.",
+      "uploadButton": "Upload Screenshot",
+      "uploadButtonShort": "Upload"
+    },
+    "drawing": {
+      "resetButton": "Reset Drawing",
+      "resetButtonShort": "Reset",
+      "undoButton": "Undo",
+      "closeFormButton": "Close Form",
+      "closeButton": "Close"
+    },
+    "form": {
+      "title": "Submit Feedback",
+      "feedbackTypeLabel": "Feedback Type",
+      "feedbackTypeRequired": "Feedback type is required",
+      "feedbackTypeBug": "Bug",
+      "feedbackTypeFeature": "Feature Request",
+      "feedbackTypeOther": "Other",
+      "descriptionLabel": "Description",
+      "descriptionRequired": "Description is required",
+      "descriptionMinLength": "Description should be at least 10 characters long",
+      "submitButton": "Submit Feedback",
+      "cancelButton": "Cancel"
+    },
+    "notifications": {
+      "screenshotUploaded": "Screenshot uploaded successfully",
+      "screenshotFailed": "Failed to upload screenshot",
+      "screenshotCaptureFailed": "Failed to capture screenshot",
+      "submitSuccess": "Feedback submitted successfully!",
+      "submitError": "Failed to submit feedback. Please try again."
+    },
+    "screenSize": {
+      "mobile": "MOBILE",
+      "tablet": "TABLET",
+      "desktop": "DESKTOP"
+    }
+  }
+}
