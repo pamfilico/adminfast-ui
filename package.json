@@ -1,6 +1,6 @@
 {
   "name": "@pamfilico/adminfast-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AdminFast UI - Reusable admin panel components for Material UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
