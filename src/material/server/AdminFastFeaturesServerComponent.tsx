@@ -8,6 +8,7 @@ export interface FeatureItem {
   translation_id?: string | null;
   title: string;
   description: string;
+  image?: string;
   seo_title?: string;
   seo_description?: string;
   seo_keywords?: string;
