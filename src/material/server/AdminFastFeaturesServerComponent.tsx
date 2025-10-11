@@ -36,15 +36,19 @@ export async function fetchFeaturesFromUrl(
   revalidate: number = 86400
 ): Promise<FeatureItem[]> {
   const url = `${baseUrl}/api/v1/apps/${appId}/features/locale/${locale}`;
+  console.log('[AdminFastFeaturesServerComponent] Fetching from URL:', url);
+
   const res = await fetch(url, {
     next: { revalidate }
   });
 
   if (!res.ok) {
+    console.error('[AdminFastFeaturesServerComponent] Fetch failed with status:', res.status);
     throw new Error('Failed to fetch features');
   }
 
   const json = await res.json();
+  console.log('[AdminFastFeaturesServerComponent] Response received:', json);
   return json.data || [];
 }
 
