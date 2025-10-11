@@ -1,6 +1,8 @@
 import React, { ComponentType } from 'react';
 import { FeatureSectionVariant1 } from '@pamfilico/uicomponents/material/home';
 
+const DEFAULT_BASE_URL = 'https://adminfast-prod-backend-ere5z.ondigitalocean.app';
+
 export interface FeatureItem {
   id: string;
   translation_id?: string | null;
@@ -14,7 +16,10 @@ export interface FeatureItem {
 }
 
 export interface AdminFastFeaturesServerComponentProps {
-  fetchFromUrl: string;
+  appId: string;
+  locale: string;
+  baseUrl?: string;
+  section_id?: string;
   renderComponent?: ComponentType<{
     title?: string;
     features: FeatureItem[];
@@ -24,10 +29,13 @@ export interface AdminFastFeaturesServerComponentProps {
 }
 
 export async function fetchFeaturesFromUrl(
-  fetchFromUrl: string,
+  appId: string,
+  locale: string,
+  baseUrl: string = DEFAULT_BASE_URL,
   revalidate: number = 86400
 ): Promise<FeatureItem[]> {
-  const res = await fetch(fetchFromUrl, {
+  const url = `${baseUrl}/api/v1/apps/${appId}/features/locale/${locale}`;
+  const res = await fetch(url, {
     next: { revalidate }
   });
 
@@ -40,11 +48,14 @@ export async function fetchFeaturesFromUrl(
 }
 
 export default async function AdminFastFeaturesServerComponent({
-  fetchFromUrl,
+  appId,
+  locale,
+  baseUrl = DEFAULT_BASE_URL,
+  section_id = "features_section",
   renderComponent: RenderComponent = FeatureSectionVariant1,
   revalidate = 86400,
 }: AdminFastFeaturesServerComponentProps) {
-  const features = await fetchFeaturesFromUrl(fetchFromUrl, revalidate);
+  const features = await fetchFeaturesFromUrl(appId, locale, baseUrl, revalidate);
 
   if (features.length === 0) {
     return null;
@@ -54,7 +65,7 @@ export default async function AdminFastFeaturesServerComponent({
     <RenderComponent
       title="Features"
       features={features}
-      section_id="features_section"
+      section_id={section_id}
     />
   );
 }

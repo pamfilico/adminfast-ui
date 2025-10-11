@@ -1,6 +1,8 @@
 import React, { ComponentType } from 'react';
 import { FaqSectionVariant1 } from '@pamfilico/uicomponents/material/home';
 
+const DEFAULT_BASE_URL = 'https://adminfast-prod-backend-ere5z.ondigitalocean.app';
+
 export interface FaqItem {
   id: string;
   translation_id?: string | null;
@@ -14,7 +16,10 @@ export interface FaqItem {
 }
 
 export interface AdminFastFaqsServerComponentProps {
-  fetchFromUrl: string;
+  appId: string;
+  locale: string;
+  baseUrl?: string;
+  section_id?: string;
   renderComponent?: ComponentType<{
     title: string;
     items: FaqItem[];
@@ -26,10 +31,13 @@ export interface AdminFastFaqsServerComponentProps {
 }
 
 export async function fetchFaqsFromUrl(
-  fetchFromUrl: string,
+  appId: string,
+  locale: string,
+  baseUrl: string = DEFAULT_BASE_URL,
   revalidate: number = 86400
 ): Promise<FaqItem[]> {
-  const res = await fetch(fetchFromUrl, {
+  const url = `${baseUrl}/api/v1/apps/${appId}/faqs/locale/${locale}`;
+  const res = await fetch(url, {
     next: { revalidate }
   });
 
@@ -42,11 +50,14 @@ export async function fetchFaqsFromUrl(
 }
 
 export default async function AdminFastFaqsServerComponent({
-  fetchFromUrl,
+  appId,
+  locale,
+  baseUrl = DEFAULT_BASE_URL,
+  section_id = "faqs_section",
   renderComponent: RenderComponent = FaqSectionVariant1,
   revalidate = 86400,
 }: AdminFastFaqsServerComponentProps) {
-  const faqs = await fetchFaqsFromUrl(fetchFromUrl, revalidate);
+  const faqs = await fetchFaqsFromUrl(appId, locale, baseUrl, revalidate);
 
   if (faqs.length === 0) {
     return null;
@@ -57,7 +68,7 @@ export default async function AdminFastFaqsServerComponent({
       title="FAQs"
       items={faqs}
       path="faqs"
-      section_id="faqs_section"
+      section_id={section_id}
       is_section={true}
     />
   );
