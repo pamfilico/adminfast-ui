@@ -1,32 +1,15 @@
-import React, { ComponentType } from 'react';
-import { FaqSectionVariant1 } from '@pamfilico/uicomponents/material/home';
+import React from 'react';
+import { FaqSectionClient, type FaqItem } from '../client/FaqSectionClient';
 
 const DEFAULT_BASE_URL = 'https://adminfast-prod-backend-ere5z.ondigitalocean.app';
 
-export interface FaqItem {
-  id: string;
-  translation_id?: string | null;
-  title: string;
-  description: string;
-  seo_title?: string;
-  seo_description?: string;
-  seo_keywords?: string;
-  is_translated?: boolean;
-  locale_code: string;
-}
+export type { FaqItem };
 
 export interface AdminFastFaqsServerComponentProps {
   appId: string;
   locale: string;
   baseUrl?: string;
   section_id?: string;
-  renderComponent?: ComponentType<{
-    title: string;
-    items: FaqItem[];
-    path?: string;
-    section_id?: string;
-    is_section?: boolean;
-  }>;
   revalidate?: number;
 }
 
@@ -54,7 +37,6 @@ export default async function AdminFastFaqsServerComponent({
   locale,
   baseUrl = DEFAULT_BASE_URL,
   section_id = "faqs_section",
-  renderComponent: RenderComponent = FaqSectionVariant1,
   revalidate = 86400,
 }: AdminFastFaqsServerComponentProps) {
   const faqs = await fetchFaqsFromUrl(appId, locale, baseUrl, revalidate);
@@ -64,7 +46,7 @@ export default async function AdminFastFaqsServerComponent({
   }
 
   return (
-    <RenderComponent
+    <FaqSectionClient
       title="FAQs"
       items={faqs}
       path="faqs"

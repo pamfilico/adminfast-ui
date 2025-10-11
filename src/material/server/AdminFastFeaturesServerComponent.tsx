@@ -1,31 +1,15 @@
-import React, { ComponentType } from 'react';
-import { FeatureSectionVariant1 } from '@pamfilico/uicomponents/material/home';
+import React from 'react';
+import { FeatureSectionClient, type FeatureItem } from '../client/FeatureSectionClient';
 
 const DEFAULT_BASE_URL = 'https://adminfast-prod-backend-ere5z.ondigitalocean.app';
 
-export interface FeatureItem {
-  id: string;
-  translation_id?: string | null;
-  title: string;
-  description: string;
-  image?: string;
-  seo_title?: string;
-  seo_description?: string;
-  seo_keywords?: string;
-  is_translated?: boolean;
-  locale_code: string;
-}
+export type { FeatureItem };
 
 export interface AdminFastFeaturesServerComponentProps {
   appId: string;
   locale: string;
   baseUrl?: string;
   section_id?: string;
-  renderComponent?: ComponentType<{
-    title?: string;
-    features: FeatureItem[];
-    section_id?: string;
-  }>;
   revalidate?: number;
 }
 
@@ -57,7 +41,6 @@ export default async function AdminFastFeaturesServerComponent({
   locale,
   baseUrl = DEFAULT_BASE_URL,
   section_id = "features_section",
-  renderComponent: RenderComponent = FeatureSectionVariant1,
   revalidate = 86400,
 }: AdminFastFeaturesServerComponentProps) {
   const features = await fetchFeaturesFromUrl(appId, locale, baseUrl, revalidate);
@@ -71,7 +54,7 @@ export default async function AdminFastFeaturesServerComponent({
 
   console.log('[AdminFastFeaturesServerComponent] Rendering features section');
   return (
-    <RenderComponent
+    <FeatureSectionClient
       title="Features"
       features={features}
       section_id={section_id}
