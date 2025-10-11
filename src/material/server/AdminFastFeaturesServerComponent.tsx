@@ -57,10 +57,14 @@ export default async function AdminFastFeaturesServerComponent({
 }: AdminFastFeaturesServerComponentProps) {
   const features = await fetchFeaturesFromUrl(appId, locale, baseUrl, revalidate);
 
+  console.log('[AdminFastFeaturesServerComponent] Features fetched:', features.length, features);
+
   if (features.length === 0) {
+    console.log('[AdminFastFeaturesServerComponent] No features found, returning null');
     return null;
   }
 
+  console.log('[AdminFastFeaturesServerComponent] Rendering features section');
   return (
     <RenderComponent
       title="Features"
