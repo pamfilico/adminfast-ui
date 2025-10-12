@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { ComponentType } from 'react';
 import { FaqSectionVariant1 } from '@pamfilico/uicomponents/material/home';
 
 export interface FaqItem {
@@ -21,8 +21,18 @@ export interface FaqSectionClientProps {
   path?: string;
   section_id?: string;
   is_section?: boolean;
+  renderComponent?: ComponentType<{
+    title: string;
+    items: FaqItem[];
+    path?: string;
+    section_id?: string;
+    is_section?: boolean;
+  }>;
 }
 
-export function FaqSectionClient(props: FaqSectionClientProps) {
-  return <FaqSectionVariant1 {...props} />;
+export function FaqSectionClient({
+  renderComponent: RenderComponent = FaqSectionVariant1,
+  ...props
+}: FaqSectionClientProps) {
+  return <RenderComponent {...props} />;
 }

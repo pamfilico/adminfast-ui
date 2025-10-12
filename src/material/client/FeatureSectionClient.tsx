@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { ComponentType } from 'react';
 import { FeatureSectionVariant1 } from '@pamfilico/uicomponents/material/home';
 
 export interface FeatureItem {
@@ -20,8 +20,16 @@ export interface FeatureSectionClientProps {
   title?: string;
   features: FeatureItem[];
   section_id?: string;
+  renderComponent?: ComponentType<{
+    title?: string;
+    features: FeatureItem[];
+    section_id?: string;
+  }>;
 }
 
-export function FeatureSectionClient(props: FeatureSectionClientProps) {
-  return <FeatureSectionVariant1 {...props} />;
+export function FeatureSectionClient({
+  renderComponent: RenderComponent = FeatureSectionVariant1,
+  ...props
+}: FeatureSectionClientProps) {
+  return <RenderComponent {...props} />;
 }

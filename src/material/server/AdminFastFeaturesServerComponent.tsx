@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentType } from 'react';
 import { FeatureSectionClient, type FeatureItem } from '../client/FeatureSectionClient';
 
 const DEFAULT_BASE_URL = 'https://adminfast-prod-backend-ere5z.ondigitalocean.app';
@@ -11,6 +11,11 @@ export interface AdminFastFeaturesServerComponentProps {
   baseUrl?: string;
   section_id?: string;
   revalidate?: number;
+  renderComponent?: ComponentType<{
+    title?: string;
+    features: FeatureItem[];
+    section_id?: string;
+  }>;
 }
 
 export async function fetchFeaturesFromUrl(
@@ -42,6 +47,7 @@ export default async function AdminFastFeaturesServerComponent({
   baseUrl = DEFAULT_BASE_URL,
   section_id = "features_section",
   revalidate = 86400,
+  renderComponent: RenderComponent = FeatureSectionClient,
 }: AdminFastFeaturesServerComponentProps) {
   const features = await fetchFeaturesFromUrl(appId, locale, baseUrl, revalidate);
 
@@ -54,7 +60,7 @@ export default async function AdminFastFeaturesServerComponent({
 
   console.log('[AdminFastFeaturesServerComponent] Rendering features section');
   return (
-    <FeatureSectionClient
+    <RenderComponent
       title="Features"
       features={features}
       section_id={section_id}
