@@ -20,6 +20,30 @@ npm install @pamfilico/adminfast-ui --legacy-peer-deps
 npm install @pamfilico/adminfast-ui
 ```
 
+## AdminFastProvider
+
+Wrap your app (or a section) with `AdminFastProvider` to provide shared config to client components via `useAdminFast()`. Server components (BlogList, BlogPost, FAQs, Features) receive config as props from the page.
+
+```tsx
+import { AdminFastProvider } from "@pamfilico/adminfast-ui";
+
+export default function RootLayout({ children }) {
+  return (
+    <AdminFastProvider
+      appId="your-app-id"
+      apiBaseUrl={process.env.ADMINFAST_API_URL!}
+      locale="en"
+      revalidate={60}
+      blogBasePath="/blogs"
+    >
+      {children}
+    </AdminFastProvider>
+  );
+}
+```
+
+Client components can then use `useAdminFast()` to access `appId`, `apiBaseUrl`, `locale`, etc.
+
 ## Quick Start
 
 ### Content List Component

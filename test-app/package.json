@@ -1,0 +1,24 @@
+{
+  "name": "adminfast-ui-blog-test",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3007",
+    "build": "next build",
+    "start": "next start -p 3007",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@pamfilico/adminfast-ui": "file:..",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "msw": "^2.11.5",
+    "typescript": "^5.7"
+  }
+}

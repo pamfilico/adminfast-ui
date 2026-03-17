@@ -14,6 +14,16 @@
       "types": "./dist/material/index.d.ts",
       "import": "./dist/material/index.js",
       "require": "./dist/material/index.js"
+    },
+    "./blog": {
+      "types": "./dist/blog/index.d.ts",
+      "import": "./dist/blog/index.js",
+      "require": "./dist/blog/index.js"
+    },
+    "./provider": {
+      "types": "./dist/provider/index.d.ts",
+      "import": "./dist/provider/index.js",
+      "require": "./dist/provider/index.js"
     }
   },
   "typesVersions": {
@@ -34,7 +44,9 @@
     "release:major": "npm version major && npm run build && npm publish --access public",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build && node .storybook/fix-github-pages.js",
-    "deploy-storybook": "npm run build-storybook && gh-pages -d storybook-static -b gh-pages --dotfiles"
+    "deploy-storybook": "npm run build-storybook && gh-pages -d storybook-static -b gh-pages --dotfiles",
+    "test-app:dev": "npm run build && cd test-app && npm install && npm run dev",
+    "test-app:build": "npm run build && cd test-app && npm install && npm run build"
   },
   "keywords": [
     "adminfast",
