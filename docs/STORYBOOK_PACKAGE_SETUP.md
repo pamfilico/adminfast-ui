@@ -113,11 +113,11 @@ import React from 'react';
 
 // Initialize MSW with correct service worker path
 // Detect if running on GitHub Pages by checking the pathname
-const isGitHubPages = typeof window !== 'undefined' && window.location.pathname.startsWith('/feedback');
+const isGitHubPages = typeof window !== 'undefined' && window.location.pathname.startsWith('/adminfast-ui');
 initialize({
   onUnhandledRequest: 'bypass',
   serviceWorker: {
-    url: isGitHubPages ? '/feedback/mockServiceWorker.js' : '/mockServiceWorker.js',
+    url: isGitHubPages ? '/adminfast-ui/mockServiceWorker.js' : '/mockServiceWorker.js',
   },
 });
 
@@ -195,173 +195,66 @@ console.log('GitHub Pages setup complete');
 
 ### 1. Create Mock Handlers
 
-Create `src/mocks/handlers.ts`:
+Create `src/mocks/faqHandlers.ts` (or similar):
 
 ```typescript
-import { http, HttpResponse, delay } from "msw";
+import { http, HttpResponse } from "msw";
 
-// Mock feedback data - MUST be a flat array, not nested
-export const mockFeedbackItems = [
+export const mockFaqItems = [
   {
-    commit_hash: null,
-    created_at: "2025-10-06T18:21:45.905601+00:00",
-    current_url: "https://example.com/page",
-    drawings: {
-      height: 833,
-      lines: [
-        {
-          brushColor: "#ff0000",
-          brushRadius: 5,
-          points: [
-            { x: 511.79998779296875, y: 143.01666259765625 },
-            { x: 516.7999877929688, y: 143.01666259765625 },
-          ],
-        },
-      ],
-      width: 1872,
-    },
-    id: "4102316c-3fba-43c2-96ee-8814488501d4",
-    image: "data:image/png;base64,iVBORw0KG...",
-    last_updated: "2025-10-06T18:21:45.905601+00:00",
-    material_ui_screensize: "desktop",
-    message: "Test feedback message",
-    softwarefast_task_id: null,
-    type_of: "bug",
-    user_email: "user@example.com",
-    user_id: "2839fced-eb31-4168-a179-3e92d11d02f0",
-    user_name: "Test User",
+    id: "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
+    translation_id: "faq-trans-1",
+    title: "How do I get started?",
+    description: "Getting started is easy! Simply sign up for an account and follow our onboarding guide.",
+    seo_title: "Getting Started Guide",
+    seo_description: "Learn how to get started",
+    seo_keywords: "getting started, onboarding",
+    is_translated: true,
+    locale_code: "en",
   },
   // Add more mock items as needed
 ];
 
-export const handlers = [
-  // POST /api/v1/feedback - Create feedback
-  http.post("/api/v1/feedback", async ({ request }) => {
-    await delay(1000);
-    const body = (await request.json()) as any;
-
+export const faqHandlers = [
+  http.get("*/api/v1/apps/:appId/faqs/locale/:locale", async ({ params }) => {
+    const { locale } = params;
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return HttpResponse.json({
       success: true,
-      message: "Feedback received!",
-      data: {
-        id: crypto.randomUUID(),
-        user_id: "mock-user-id",
-        type_of: body.feedbackType || "other",
-        message: body.description || "",
-        created_at: new Date().toISOString(),
-      },
-    });
-  }),
-
-  // GET /api/v1/feedback - Get paginated feedback list
-  http.get("/api/v1/feedback", async ({ request }) => {
-    await delay(500);
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get("page") || "1");
-    const limit = parseInt(url.searchParams.get("limit") || "20");
-
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const items = mockFeedbackItems.slice(start, end);
-
-    return HttpResponse.json({
-      success: true,
-      data: {
-        items,
-        pagination: {
-          page,
-          limit,
-          total_count: mockFeedbackItems.length,
-          total_pages: Math.ceil(mockFeedbackItems.length / limit),
-          has_next: end < mockFeedbackItems.length,
-          has_prev: page > 1,
-        },
-      },
-    });
-  }),
-
-  // GET /api/v1/feedback/:id - Get single feedback
-  http.get("/api/v1/feedback/:id", async ({ params }) => {
-    await delay(500);
-    const { id } = params;
-    const feedback = mockFeedbackItems.find((item) => item.id === id);
-
-    if (!feedback) {
-      return HttpResponse.json(
-        { success: false, error: "Feedback not found" },
-        { status: 404 }
-      );
-    }
-
-    return HttpResponse.json({
-      success: true,
-      data: feedback,
-    });
-  }),
-
-  // PUT /api/v1/feedback/:id - Update feedback
-  http.put("/api/v1/feedback/:id", async ({ params, request }) => {
-    await delay(1000);
-    const { id } = params;
-    const body = (await request.json()) as any;
-    const feedback = mockFeedbackItems.find((item) => item.id === id);
-
-    if (!feedback) {
-      return HttpResponse.json(
-        { success: false, error: "Feedback not found" },
-        { status: 404 }
-      );
-    }
-
-    return HttpResponse.json({
-      success: true,
-      data: {
-        id,
-        message: "Feedback updated successfully",
-      },
+      data: mockFaqItems.map((item) => ({ ...item, locale_code: locale })),
     });
   }),
 ];
 ```
 
-**IMPORTANT:**
-- `mockFeedbackItems` MUST be a flat array `[{...}, {...}]`, NOT nested `[[{...}]]`
-- Stories access items via `mockFeedbackItems[0]`, not `mockFeedbackItems[0][0]`
-
 ### 2. Initialize MSW in Storybook
 
 The MSW initialization in `.storybook/preview.tsx` handles:
-- Detecting GitHub Pages deployment (checks for `/feedback` path prefix)
+- Detecting GitHub Pages deployment (checks for `/adminfast-ui` path prefix)
 - Adjusting service worker URL accordingly
 - Loading handlers via `mswLoader`
 
 ### 3. Using MSW in Stories
 
-Stories automatically use MSW handlers:
+Stories can pass handlers via `parameters.msw.handlers`:
 
 ```typescript
 import type { Meta, StoryObj } from "@storybook/react";
-import { MaterialFeedbackButton } from "./MaterialFeedbackButton";
-import { mockFeedbackItems } from "../mocks/handlers";
+import { faqHandlers } from "../mocks/faqHandlers";
 
-const meta: Meta<typeof MaterialFeedbackButton> = {
-  title: "Material/MaterialFeedbackButton",
-  component: MaterialFeedbackButton,
+const meta: Meta<typeof MyComponent> = {
+  title: "Material/MyComponent",
+  component: MyComponent,
   parameters: {
     layout: "fullscreen",
+    msw: { handlers: faqHandlers },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    userEmail: "user@example.com",
-    apiBasePath: "/api/v1/feedback",
-    additionalHeaders: {},
-  },
-};
+export const Default: Story = {};
 ```
 
 ---
@@ -451,8 +344,8 @@ npm run deploy-storybook
 - Check console for MSW registration errors
 
 **Stories not loading:**
-- Ensure `mockFeedbackItems` is a flat array
-- Verify story imports: `mockFeedbackItems[0]` not `mockFeedbackItems[0][0]`
+- Ensure mock data matches the expected API response shape
+- Verify handler paths match the API URLs your components call
 
 **Build failures:**
 - Clear `node_modules` and reinstall
@@ -474,7 +367,7 @@ src/
 │   ├── Component.tsx
 │   └── Component.stories.tsx  # Stories co-located with components
 └── mocks/
-    └── handlers.ts            # MSW mock API handlers
+    └── faqHandlers.ts         # MSW mock API handlers
 
 public/
 └── mockServiceWorker.js       # MSW service worker (generated)

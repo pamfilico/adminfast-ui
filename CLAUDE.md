@@ -4,8 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is `@pamfilico/adminfast-ui`, a TypeScript library providing reusable admin panel UI components for Material UI/Next.js applications. The package includes content management components (ContentList, ContentEdit) with multi-locale translation support, as well as legacy feedback components for capturing user feedback with screenshots.
-
+This is `@pamfilico/adminfast-ui`, a TypeScript library providing reusable admin panel UI components for Material UI/Next.js applications. The package includes content management components (ContentList, ContentEdit) with multi-locale translation support, 
 ## Build & Development Commands
 
 ```bash
@@ -34,11 +33,11 @@ npm run release:major  # Manual: 1.x.x -> (x+1).0.0 - for breaking changes
 
 - **Entry points**:
   - `@pamfilico/adminfast-ui` (main): Exports all components
-  - `@pamfilico/adminfast-ui/material`: Direct Material UI component access (legacy feedback components)
+  - `@pamfilico/adminfast-ui/material`: Direct Material UI component access (server components)
 - **Source**: Component code in `src/` directory
 - **Build**: TypeScript compiles to `dist/` with declaration files
-- **Storybook stories**: Co-located with components (e.g., `MaterialFeedbackButton.stories.tsx`)
-- **Mock API handlers**: `src/mocks/handlers.ts` (MSW configuration)
+- **Storybook stories**: Co-located with components
+- **Mock API handlers**: `src/mocks/faqHandlers.ts` (MSW configuration for FAQs)
 - **Public assets**: `public/mockServiceWorker.js` (MSW service worker)
 
 ### Key Components
@@ -91,27 +90,6 @@ npm run release:major  # Manual: 1.x.x -> (x+1).0.0 - for breaking changes
    - All functions support OpenGraph and Twitter Card metadata
    - **See [docs/SEO_IMPLEMENTATION_GUIDE.md](docs/SEO_IMPLEMENTATION_GUIDE.md) for complete usage examples**
 
-#### Legacy Feedback Components
-
-6. **MaterialFeedbackButton** (`src/material/MaterialFeedbackButton.tsx`)
-   - Floating feedback button that captures screenshots using `html-to-image`
-   - Opens fullscreen dialog with drawing canvas overlay (`react-canvas-draw`)
-   - Side drawer form for feedback submission (Formik + Yup validation)
-   - Device detection via MUI breakpoints (mobile/tablet/desktop)
-   - Automatically captures current URL and device type
-   - Supports manual screenshot upload if auto-capture fails
-
-7. **FeedbackPageComponent** (`src/material/FeedbackPageComponent.tsx`)
-   - Paginated feedback list viewer with customizable fetch URL
-   - Uses `fetchFeedbacksUrl` prop for fetching paginated feedback
-   - Optional `editingUrl` prop for edit operations
-   - Opens fullscreen dialog for inline editing
-   - Shows device type indicators and type-based color coding
-
-8. **FeedbackEditPageComponent** (`src/material/FeedbackEditPageComponent.tsx`)
-   - Wrapper that fetches feedback data and delegates to device-specific edit components
-   - Automatically selects DesktopEditFeedbackComponent or MobileEditFeedbackComponent
-
 ### Technology Stack
 
 - **React 19** / **Next.js 15** (with legacy peer deps for react-canvas-draw compatibility)
@@ -150,8 +128,6 @@ npm run release:major  # Manual: 1.x.x -> (x+1).0.0 - for breaking changes
 - Translation: All base fields plus `is_translated`, `locale_id`, `locale_code`, `locale_description`
 - Terms/Privacy use `content` instead of `description` in translations
 
-**Legacy Feedback API** (see original CLAUDE.md for details)
-
 ### Installation Notes
 
 For React 19 / Next.js 15+ projects, requires `--legacy-peer-deps` flag due to `react-canvas-draw` peer dependency constraints (works fine at runtime).
@@ -159,7 +135,7 @@ For React 19 / Next.js 15+ projects, requires `--legacy-peer-deps` flag due to `
 ### Storybook & Testing
 
 - **Storybook**: Used for component development and visual testing
-- **MSW (Mock Service Worker)**: API mocking configured in `src/mocks/handlers.ts`
+- **MSW (Mock Service Worker)**: API mocking configured in `src/mocks/faqHandlers.ts`
 - **GitHub Pages**: Storybook deployed to gh-pages branch
 - **For complete Storybook setup instructions, see [docs/STORYBOOK_PACKAGE_SETUP.md](docs/STORYBOOK_PACKAGE_SETUP.md)**
 

@@ -206,27 +206,6 @@ export default async function FaqsPage() {
 - `generateFeatureStructuredData()` - Create product/feature schema
 - `StructuredData` component - Helper for injecting JSON-LD
 
-### Material UI Feedback Button (Legacy)
-
-The package also includes the original feedback components:
-
-```tsx
-import { MaterialFeedbackButton } from "@pamfilico/adminfast-ui/material";
-
-export default function MyApp() {
-  return (
-    <>
-      {/* Your app content */}
-      <MaterialFeedbackButton
-        meta={{ user_email: "user@example.com", visitor_id: "abc123" }}
-        apiBasePath="/api/v1/feedback"
-        additionalHeaders={{ "Authorization": "Bearer token" }}
-      />
-    </>
-  );
-}
-```
-
 ## Features
 
 - 🚀 **Rapid Development** - Pre-built components for common admin panel needs

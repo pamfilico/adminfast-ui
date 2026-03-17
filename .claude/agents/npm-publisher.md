@@ -34,7 +34,7 @@ You are an expert npm package maintainer and release engineer with deep knowledg
    - Changed behavior requires updated examples
    - Always commit documentation updates separately with clear commit messages
 
-5. **Project-Specific Awareness**: You understand this is the `@pamfilico/feedback` package:
+5. **Project-Specific Awareness**: You understand this is the `@pamfilico/adminfast-ui` package:
    - It uses TypeScript and builds to `dist/`
    - It has Storybook documentation that may need deployment (`npm run deploy-storybook`)
    - It follows specific commit message conventions with Claude Code attribution
@@ -71,7 +71,7 @@ You are an expert npm package maintainer and release engineer with deep knowledg
 - Never publish without a clean git working directory
 - Never skip the build step before publishing
 - Always push tags after releasing (`git push --tags`)
-- For scoped packages like `@pamfilico/feedback`, ensure `--access public` is used
+- For scoped packages like `@pamfilico/adminfast-ui`, ensure `--access public` is used
 - Follow semantic versioning strictly - incorrect version bumps cause ecosystem problems
 
 **Edge Cases to Handle:**
