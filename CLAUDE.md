@@ -88,7 +88,7 @@ npm run release:major  # Manual: 1.x.x -> (x+1).0.0 - for breaking changes
    - `generateFaqStructuredData(faqs)` - Create FAQ schema.org JSON-LD for rich snippets
    - `generateFeatureStructuredData(features, productName)` - Create Product schema for rich snippets
    - All functions support OpenGraph and Twitter Card metadata
-   - **See [adminfast-ui SEO Implementation Guide](../../docs/check/adminfast-ui-seo-implementation-guide.md) for complete usage examples**
+   - **See codespec `docs/check/adminfast-ui-seo-implementation-guide.md` for complete usage examples**
 
 ### Technology Stack
 
@@ -137,7 +137,7 @@ For React 19 / Next.js 15+ projects, requires `--legacy-peer-deps` flag due to `
 - **Storybook**: Used for component development and visual testing
 - **MSW (Mock Service Worker)**: API mocking configured in `src/mocks/faqHandlers.ts`
 - **GitHub Pages**: Storybook deployed to gh-pages branch
-- **For complete Storybook setup instructions, see [adminfast-ui Storybook Setup](../../docs/check/adminfast-ui-storybook-package-setup.md)**
+- **For complete Storybook setup instructions, see codespec `docs/check/adminfast-ui-storybook-package-setup.md`**
 
 ## Development Guidelines
 
